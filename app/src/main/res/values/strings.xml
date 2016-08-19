@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Master</string>
+    <string name="error_loading_failed">Loading failed, check the connection, try again later</string>
+</resources>
