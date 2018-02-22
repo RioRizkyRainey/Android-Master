@@ -1,6 +1,10 @@
 package id.rainey.master.app;
 
+import android.app.*;
+import android.app.Application;
 import android.content.Context;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -12,21 +16,27 @@ import io.realm.Realm;
 @Module
 public final class ApplicationModule {
 
-    private final Context mContext;
+    Application mApplication;
     private final Realm mRealm;
 
-    ApplicationModule(Context context, Realm mRealm) {
-        this.mContext = context;
+    ApplicationModule(Application application, Realm mRealm) {
+        this.mApplication = application;
         this.mRealm = mRealm;
     }
 
     @Provides
     Context provideContext() {
-        return mContext;
+        return mApplication;
     }
 
     @Provides
     Realm provideRealm() {
         return mRealm;
+    }
+
+    @Provides
+    @Singleton
+    android.app.Application provideApplication() {
+        return mApplication;
     }
 }

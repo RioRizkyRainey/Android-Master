@@ -2,16 +2,20 @@ package id.rainey.master.app;
 
 import android.content.Context;
 
-import com.loopj.android.http.AsyncHttpClient;
+import java.util.ArrayList;
+import java.util.List;
 
+import id.rainey.master.R;
 import id.rainey.master.session.ObscuredModule;
-import id.rainey.master.utils.network.ServerRestClientModule;
+import id.rainey.master.utils.network.NetModule;
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
+import okhttp3.Interceptor;
 
 public class Application extends android.app.Application {
 
     private static Context ctx;
+
+    public final static String APP_NAME = getContext().getResources().getString(R.string.app_name);
 
     private AppComponent mAppComponent;
 
@@ -19,24 +23,25 @@ public class Application extends android.app.Application {
         return ctx;
     }
 
+    protected String BASE_API = "";
+
     @Override
     public void onCreate() {
         super.onCreate();
 
-        // TODO uncomment on release
-        //Fabric.with(this, new Crashlytics());
         ctx = getApplicationContext();
-
-        RealmConfiguration realmConfig = new RealmConfiguration.Builder(ctx).build();
-        Realm.setDefaultConfiguration(realmConfig);
 
         Realm realm = Realm.getDefaultInstance();
 
         mAppComponent = DaggerAppComponent.builder()
                 .obscuredModule(new ObscuredModule(getApplicationContext()))
-                .serverRestClientModule(new ServerRestClientModule(new AsyncHttpClient()))
-                .applicationModule(new ApplicationModule(getApplicationContext(), realm))
+                .netModule(new NetModule(BASE_API, getInterceptors()))
+                .applicationModule(new ApplicationModule(this, realm))
                 .build();
+    }
+
+    public List<Interceptor> getInterceptors() {
+        return new ArrayList<>();
     }
 
     public AppComponent getAppComponent() {
