@@ -29,6 +29,8 @@ public abstract class Application extends android.app.Application {
 
         ctx = getApplicationContext();
 
+        Realm.init(ctx);
+
         Realm realm = Realm.getDefaultInstance();
 
         mAppComponent = DaggerAppComponent.builder()
