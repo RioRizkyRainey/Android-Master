@@ -14,6 +14,7 @@ import dagger.Module;
 import dagger.Provides;
 import id.rainey.master.app.AppScope;
 import id.rainey.master.utils.interceptor.ConnectivityInterceptor;
+import id.rainey.master.utils.interceptor.HeaderInterceptor;
 import id.rainey.master.utils.interceptor.LoggingInterceptor;
 import okhttp3.Cache;
 import okhttp3.Interceptor;
@@ -55,7 +56,7 @@ public class NetModule {
 
     @Provides
     @Singleton
-    OkHttpClient provideOkhttpClient(Cache cache) {
+    OkHttpClient provideOkhttpClient(Application application, Cache cache) {
         OkHttpClient.Builder client = new OkHttpClient.Builder();
 
         for (Interceptor interceptor : interceptors) {
@@ -64,6 +65,7 @@ public class NetModule {
 
         client.addInterceptor(new ConnectivityInterceptor());
         client.addInterceptor(new LoggingInterceptor());
+        client.addInterceptor(new HeaderInterceptor( ((id.rainey.master.app.Application) application).getAppName()));
 
         client.cache(cache);
         return client.build();

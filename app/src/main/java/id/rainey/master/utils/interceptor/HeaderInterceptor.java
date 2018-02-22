@@ -12,12 +12,19 @@ import okhttp3.Response;
  */
 
 public class HeaderInterceptor implements Interceptor {
+
+    String appName;
+
+    public HeaderInterceptor(String appName) {
+        this.appName = appName;
+    }
+
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request original = chain.request();
 
         Request request = original.newBuilder()
-                .header("User-Agent", Application.APP_NAME)
+                .header("User-Agent", appName)
                 .header("Accept", "application/json")
                 .method(original.method(), original.body())
                 .build();

@@ -11,11 +11,9 @@ import id.rainey.master.utils.network.NetModule;
 import io.realm.Realm;
 import okhttp3.Interceptor;
 
-public class Application extends android.app.Application {
+public abstract class Application extends android.app.Application {
 
     private static Context ctx;
-
-    public final static String APP_NAME = getContext().getResources().getString(R.string.app_name);
 
     private AppComponent mAppComponent;
 
@@ -47,5 +45,7 @@ public class Application extends android.app.Application {
     public AppComponent getAppComponent() {
         return mAppComponent;
     }
+
+    public abstract String getAppName();
 
 }
